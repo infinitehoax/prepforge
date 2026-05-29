@@ -1,0 +1,175 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-primary: #050d1a;
+  --bg-secondary: #0a1628;
+  --bg-card: #0d1e35;
+  --bg-card-hover: #112440;
+  --border: #1e3a5f;
+  --border-light: #234872;
+  --text-primary: #e2f0ff;
+  --text-secondary: #7ca8d4;
+  --text-muted: #3d6b96;
+  --accent-blue: #0ea5e9;
+  --accent-green: #22c55e;
+  --accent-amber: #f59e0b;
+  --accent-rose: #f43f5e;
+  --accent-purple: #8b5cf6;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: 'DM Sans', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  user-select: none;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--border-light);
+}
+
+/* Allow text selection in question areas */
+.selectable {
+  user-select: text;
+}
+
+/* Glass card */
+.glass-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.glass-card:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-light);
+}
+
+/* Answer option button */
+.option-btn {
+  @apply w-full text-left p-4 rounded-xl border transition-all duration-150 cursor-pointer;
+  background: var(--bg-card);
+  border-color: var(--border);
+  color: var(--text-primary);
+}
+
+.option-btn:hover:not(.option-selected):not(.option-correct):not(.option-wrong) {
+  background: var(--bg-card-hover);
+  border-color: var(--border-light);
+}
+
+.option-selected {
+  background: rgba(14, 165, 233, 0.15) !important;
+  border-color: var(--accent-blue) !important;
+  color: #7dd3fc !important;
+}
+
+.option-correct {
+  background: rgba(34, 197, 94, 0.15) !important;
+  border-color: var(--accent-green) !important;
+  color: #86efac !important;
+}
+
+.option-wrong {
+  background: rgba(244, 63, 94, 0.15) !important;
+  border-color: var(--accent-rose) !important;
+  color: #fda4af !important;
+}
+
+/* Timer pulse when low */
+.timer-critical {
+  animation: timerPulse 1s ease-in-out infinite;
+  color: var(--accent-rose) !important;
+}
+
+@keyframes timerPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* Question navigator grid */
+.q-nav-btn {
+  @apply w-8 h-8 rounded-lg text-xs font-mono font-medium transition-all duration-100 flex items-center justify-center cursor-pointer;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+}
+
+.q-nav-btn:hover {
+  border-color: var(--accent-blue);
+  color: var(--text-primary);
+}
+
+.q-nav-btn.answered {
+  background: rgba(14, 165, 233, 0.2);
+  border-color: var(--accent-blue);
+  color: #7dd3fc;
+}
+
+.q-nav-btn.current {
+  background: var(--accent-blue);
+  border-color: var(--accent-blue);
+  color: white;
+}
+
+.q-nav-btn.flagged {
+  background: rgba(245, 158, 11, 0.2);
+  border-color: var(--accent-amber);
+  color: #fcd34d;
+}
+
+/* Score ring */
+.score-ring {
+  stroke-linecap: round;
+  transition: stroke-dashoffset 1s ease-out;
+}
+
+/* Animated entrance */
+.animate-in {
+  animation: slideUp 0.35s ease-out both;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Sidebar nav item */
+.nav-item {
+  @apply flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-150 cursor-pointer;
+  color: var(--text-secondary);
+}
+
+.nav-item:hover {
+  background: var(--bg-card);
+  color: var(--text-primary);
+}
+
+.nav-item.active {
+  background: rgba(14, 165, 233, 0.15);
+  color: #7dd3fc;
+  border-left: 2px solid var(--accent-blue);
+}
