@@ -11,8 +11,8 @@
     "prepare": "husky"
   },
   "dependencies": {
-    "@tauri-apps/api": "^2.0.0",
-    "@tauri-apps/plugin-sql": "^2.0.0",
+    "@tauri-apps/api": "2.11.0",
+    "@tauri-apps/plugin-sql": "2.4.0",
     "clsx": "^2.1.1",
     "lucide-react": "^0.462.0",
     "react": "^18.3.1",
