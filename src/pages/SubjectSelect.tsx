@@ -19,6 +19,7 @@ export function SubjectSelect() {
   const [selectedYear, setSelectedYear] = useState<number>(2023);
   const [availableYears, setAvailableYears] = useState<number[]>([]);
   const [error, setError] = useState("");
+  const [isLoadingYears, setIsLoadingYears] = useState(true);
 
   const config = EXAM_CONFIG[examType];
   const subjects = getSubjectsForExam(examType);
@@ -26,10 +27,22 @@ export function SubjectSelect() {
   useEffect(() => {
     setSelectedSubjects([]);
     setError("");
-    getAvailableYears(examType).then((years) => {
-      setAvailableYears(years);
-      if (years.length > 0) setSelectedYear(years[0]);
-    });
+    setIsLoadingYears(true);
+    setAvailableYears([]);
+
+    getAvailableYears(examType)
+      .then((years) => {
+        setAvailableYears(years);
+        if (years.length > 0) {
+          setSelectedYear(years[0]);
+        }
+        setIsLoadingYears(false);
+      })
+      .catch((err) => {
+        console.error("Failed to load years:", err);
+        setError("Failed to load available years. Please restart the app.");
+        setIsLoadingYears(false);
+      });
   }, [examType]);
 
   function toggleSubject(id: SubjectId) {
@@ -223,9 +236,13 @@ export function SubjectSelect() {
           Step 3 — Year
         </label>
         <div className="flex gap-2 flex-wrap">
-          {availableYears.length === 0 ? (
+          {isLoadingYears ? (
             <span className="text-xs" style={{ color: "var(--text-muted)" }}>
               Loading years...
+            </span>
+          ) : availableYears.length === 0 ? (
+            <span className="text-xs" style={{ color: "var(--text-muted)" }}>
+              {error ? "Error loading years" : "No years available for this exam type"}
             </span>
           ) : (
             availableYears.map((year) => (
