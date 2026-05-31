@@ -27,14 +27,22 @@ export function SubjectSelect() {
   useEffect(() => {
     setSelectedSubjects([]);
     setError("");
-    setIsLoadingYears(true);
-    setAvailableYears([]);
+  }, [examType]);
 
-    getAvailableYears(examType)
+  const effectiveSelected =
+    examType === "JAMB" && !selectedSubjects.includes("english")
+      ? ["english" as SubjectId, ...selectedSubjects]
+      : selectedSubjects;
+
+  useEffect(() => {
+    setIsLoadingYears(true);
+    getAvailableYears(examType, effectiveSelected)
       .then((years) => {
         setAvailableYears(years);
         if (years.length > 0) {
-          setSelectedYear(years[0]);
+          if (!years.includes(selectedYear)) {
+            setSelectedYear(years[0]);
+          }
         }
         setIsLoadingYears(false);
       })
@@ -43,7 +51,7 @@ export function SubjectSelect() {
         setError("Failed to load available years. Please restart the app.");
         setIsLoadingYears(false);
       });
-  }, [examType]);
+  }, [examType, effectiveSelected]);
 
   function toggleSubject(id: SubjectId) {
     setError("");
@@ -92,10 +100,6 @@ export function SubjectSelect() {
   }
 
   // Auto-include English for JAMB
-  const effectiveSelected =
-    examType === "JAMB" && !selectedSubjects.includes("english")
-      ? ["english" as SubjectId, ...selectedSubjects]
-      : selectedSubjects;
 
   return (
     <div className="p-8 max-w-4xl animate-in">
@@ -342,7 +346,8 @@ export function SubjectSelect() {
       {/* Start button */}
       <button
         onClick={handleStart}
-        className="flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-sm transition-all hover:opacity-90 active:scale-95"
+        disabled={availableYears.length === 0 || (examType === "JAMB" && effectiveSelected.length !== 4)}
+        className="flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-sm transition-all hover:opacity-90 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
         style={{ background: "var(--accent-blue)", color: "white" }}
       >
         Begin Exam
